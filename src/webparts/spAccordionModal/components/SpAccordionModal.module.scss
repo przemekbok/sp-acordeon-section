@@ -78,9 +78,7 @@
 .contentWrapper {
   padding: 24px 20px;
   background-color: transparent; // Inherit section background
-  border-left: 1px solid #EBEBEB;
-  border-right: 1px solid #EBEBEB;
-  border-bottom: 1px solid #EBEBEB;
+  border: none; // Removed borders
 }
 
 .accordionBody {
