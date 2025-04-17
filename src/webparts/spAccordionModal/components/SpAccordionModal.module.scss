@@ -28,10 +28,10 @@
 }
 
 .accordionItem {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   background-color: transparent;
   box-shadow: none;
-  border-radius: 2px;
+  border-radius: 0;
   overflow: hidden;
 }
 
@@ -39,24 +39,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 15px 20px;
+  padding: 16px 20px;
   cursor: pointer;
-  background-color: "[theme:neutralLighter, default: #f3f2f1]";
-  background-color: var(--neutralLighter);
-  border: 1px solid "[theme:neutralLight, default: #edebe9]";
-  border: 1px solid var(--neutralLight);
+  background-color: #F2F2F2; // Light gray background
+  border: none;
   transition: background-color 0.2s ease;
   
   &:hover {
-    background-color: "[theme:neutralLight, default: #edebe9]";
-    background-color: var(--neutralLight);
+    background-color: #EBEBEB;
   }
   
   &.expanded {
-    background-color: "[theme:themePrimary, default: #0078d4]";
-    background-color: var(--themePrimary);
-    color: "[theme:white, default: #ffffff]";
-    color: var(--white);
+    background-color: #0078D4; // Microsoft blue when expanded
+    color: white;
   }
 }
 
@@ -64,6 +59,7 @@
   font-weight: 600;
   font-size: 16px;
   margin: 0;
+  font-family: 'Segoe UI', sans-serif;
 }
 
 .accordionIcon {
@@ -77,18 +73,18 @@
 
 .accordionContent {
   padding: 0;
-  max-height: 0;
+  height: 0;
   overflow: hidden;
-  transition: max-height 0.3s ease-in-out, padding 0.3s ease;
-  background-color: "[theme:white, default: #ffffff]";
-  background-color: var(--white);
-  border: 1px solid "[theme:neutralLight, default: #edebe9]";
-  border: 1px solid var(--neutralLight);
-  border-top: none;
+  transition: height 0.5s cubic-bezier(0.19, 1, 0.22, 1), padding 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  background-color: white;
+  border: none;
   
   &.expanded {
-    padding: 20px;
-    max-height: 1000px; // Arbitrary large value
+    padding: 24px 20px;
+    height: auto;
+    border-left: 1px solid #EBEBEB;
+    border-right: 1px solid #EBEBEB;
+    border-bottom: 1px solid #EBEBEB;
   }
 }
 
