@@ -1,41 +1,102 @@
 import * as React from 'react';
 import styles from './SpAccordionModal.module.scss';
 import type { ISpAccordionModalProps } from './ISpAccordionModalProps';
-import { escape } from '@microsoft/sp-lodash-subset';
+import { SharePointService } from '../services/SharePointService';
+import { IAccordionItem } from '../models/IAccordionItem';
+import { AccordionItem } from './AccordionItem';
+import { Spinner, SpinnerSize } from '@fluentui/react/lib/Spinner';
+import { MessageBar, MessageBarType } from '@fluentui/react/lib/MessageBar';
 
-export default class SpAccordionModal extends React.Component<ISpAccordionModalProps> {
+export interface ISpAccordionModalState {
+  accordionItems: IAccordionItem[];
+  loading: boolean;
+  error: string | null;
+}
+
+export default class SpAccordionModal extends React.Component<ISpAccordionModalProps, ISpAccordionModalState> {
+  private sharePointService: SharePointService;
+
+  constructor(props: ISpAccordionModalProps) {
+    super(props);
+    
+    this.state = {
+      accordionItems: [],
+      loading: true,
+      error: null
+    };
+
+    this.sharePointService = new SharePointService(this.props.context);
+  }
+
+  public componentDidMount(): void {
+    this.fetchAccordionItems();
+  }
+
+  public componentDidUpdate(prevProps: ISpAccordionModalProps): void {
+    if (prevProps.listName !== this.props.listName) {
+      this.fetchAccordionItems();
+    }
+  }
+
+  private async fetchAccordionItems(): Promise<void> {
+    if (!this.props.listName) {
+      this.setState({
+        accordionItems: [],
+        loading: false,
+        error: 'Please configure a list name in the webpart properties.'
+      });
+      return;
+    }
+
+    this.setState({ loading: true, error: null });
+
+    try {
+      const items = await this.sharePointService.getAccordionItems(this.props.listName);
+      this.setState({
+        accordionItems: items,
+        loading: false,
+        error: items.length === 0 ? 'No items found in the list. Please make sure the list contains items with Title and Description fields.' : null
+      });
+    } catch (error) {
+      this.setState({
+        loading: false,
+        error: `Error loading accordion items: ${error.message}`
+      });
+    }
+  }
+
   public render(): React.ReactElement<ISpAccordionModalProps> {
-    const {
-      description,
-      isDarkTheme,
-      environmentMessage,
-      hasTeamsContext,
-      userDisplayName
-    } = this.props;
+    const { loading, error, accordionItems } = this.state;
+    const { hasTeamsContext } = this.props;
 
     return (
       <section className={`${styles.spAccordionModal} ${hasTeamsContext ? styles.teams : ''}`}>
-        <div className={styles.welcome}>
-          <img alt="" src={isDarkTheme ? require('../assets/welcome-dark.png') : require('../assets/welcome-light.png')} className={styles.welcomeImage} />
-          <h2>Well done, {escape(userDisplayName)}!</h2>
-          <div>{environmentMessage}</div>
-          <div>Web part property value: <strong>{escape(description)}</strong></div>
-        </div>
-        <div>
-          <h3>Welcome to SharePoint Framework!</h3>
-          <p>
-            The SharePoint Framework (SPFx) is a extensibility model for Microsoft Viva, Microsoft Teams and SharePoint. It&#39;s the easiest way to extend Microsoft 365 with automatic Single Sign On, automatic hosting and industry standard tooling.
-          </p>
-          <h4>Learn more about SPFx development:</h4>
-          <ul className={styles.links}>
-            <li><a href="https://aka.ms/spfx" target="_blank" rel="noreferrer">SharePoint Framework Overview</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-graph" target="_blank" rel="noreferrer">Use Microsoft Graph in your solution</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-teams" target="_blank" rel="noreferrer">Build for Microsoft Teams using SharePoint Framework</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-viva" target="_blank" rel="noreferrer">Build for Microsoft Viva Connections using SharePoint Framework</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-store" target="_blank" rel="noreferrer">Publish SharePoint Framework applications to the marketplace</a></li>
-            <li><a href="https://aka.ms/spfx-yeoman-api" target="_blank" rel="noreferrer">SharePoint Framework API reference</a></li>
-            <li><a href="https://aka.ms/m365pnp" target="_blank" rel="noreferrer">Microsoft 365 Developer Community</a></li>
-          </ul>
+        <div className={styles.accordionContainer}>
+          {loading && (
+            <div className={styles.loading}>
+              <Spinner size={SpinnerSize.large} label="Loading accordion items..." />
+            </div>
+          )}
+          
+          {!loading && error && (
+            <MessageBar messageBarType={MessageBarType.error}>
+              {error}
+            </MessageBar>
+          )}
+          
+          {!loading && !error && accordionItems.length > 0 && (
+            <div>
+              {accordionItems.map(item => (
+                <AccordionItem key={item.id} item={item} />
+              ))}
+            </div>
+          )}
+          
+          {!loading && !error && accordionItems.length === 0 && (
+            <MessageBar messageBarType={MessageBarType.info}>
+              No items found. Please add items to the list or configure the webpart properties.
+            </MessageBar>
+          )}
         </div>
       </section>
     );
