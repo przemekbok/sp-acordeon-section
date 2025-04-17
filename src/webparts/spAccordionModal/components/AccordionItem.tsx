@@ -12,30 +12,34 @@ export const AccordionItem: React.FC<IAccordionItemProps> = (props) => {
   const { item } = props;
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const contentRef = useRef<HTMLDivElement>(null);
-  const bodyRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   
-  // Update the height calculation whenever the content changes or on window resize
-  const updateHeight = (): void => {
-    if (contentRef.current && bodyRef.current) {
+  // Fix for content shifting - use a completely different approach
+  useEffect(() => {
+    if (contentRef.current && wrapperRef.current) {
       if (isExpanded) {
-        // Get the exact height of the body content
-        const bodyHeight = bodyRef.current.getBoundingClientRect().height;
-        // Set the content container height
-        contentRef.current.style.height = `${bodyHeight}px`;
+        // Get the height of the wrapper with all its content
+        const wrapperHeight = wrapperRef.current.offsetHeight;
+        // Set the height explicitly
+        contentRef.current.style.height = `${wrapperHeight}px`;
       } else {
         contentRef.current.style.height = '0px';
       }
     }
-  };
-  
-  // Handle expand/collapse
+  }, [isExpanded]);
+
+  // Handle window resize to maintain proper heights
   useEffect(() => {
-    updateHeight();
-    
-    // Also update on window resize for responsive behavior
-    window.addEventListener('resize', updateHeight);
+    const handleResize = () => {
+      if (isExpanded && contentRef.current && wrapperRef.current) {
+        const wrapperHeight = wrapperRef.current.offsetHeight;
+        contentRef.current.style.height = `${wrapperHeight}px`;
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
     return () => {
-      window.removeEventListener('resize', updateHeight);
+      window.removeEventListener('resize', handleResize);
     };
   }, [isExpanded]);
 
@@ -65,14 +69,15 @@ export const AccordionItem: React.FC<IAccordionItemProps> = (props) => {
       </div>
       <div 
         ref={contentRef}
-        className={`${styles.accordionContent} ${isExpanded ? styles.expanded : ''}`}
+        className={`${styles.accordionContent}`}
         aria-hidden={!isExpanded}
       >
-        <div 
-          ref={bodyRef}
-          className={styles.accordionBody}
-          dangerouslySetInnerHTML={{ __html: item.description }}
-        />
+        <div ref={wrapperRef} className={styles.contentWrapper}>
+          <div 
+            className={styles.accordionBody}
+            dangerouslySetInnerHTML={{ __html: item.description }}
+          />
+        </div>
       </div>
     </div>
   );
