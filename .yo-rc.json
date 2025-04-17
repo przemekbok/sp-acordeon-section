@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "18.18.2",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.24.0"
+    },
+    "version": "1.20.0",
+    "libraryName": "cccloud",
+    "libraryId": "a701d7c7-3ca9-41fc-86b3-4e2cc7f0656b",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "cccloud",
+    "solutionShortDescription": "cccloud description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
