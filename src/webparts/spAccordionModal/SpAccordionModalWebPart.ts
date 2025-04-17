@@ -111,10 +111,15 @@ export default class SpAccordionModalWebPart extends BaseClientSideWebPart<ISpAc
               groupFields: [
                 PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
-                }),
+                })
+              ]
+            },
+            {
+              groupName: strings.ListConfigGroupName,
+              groupFields: [
                 PropertyPaneTextField('listName', {
-                  label: 'List Name',
-                  description: 'Enter the name of the SharePoint list containing accordion items'
+                  label: strings.ListNameFieldLabel,
+                  description: strings.ListNameFieldDescription
                 })
               ]
             }
