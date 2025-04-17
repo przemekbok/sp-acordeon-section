@@ -2,6 +2,9 @@ declare interface ISpAccordionModalWebPartStrings {
   PropertyPaneDescription: string;
   BasicGroupName: string;
   DescriptionFieldLabel: string;
+  ListNameFieldLabel: string;
+  ListConfigGroupName: string;
+  ListNameFieldDescription: string;
   AppLocalEnvironmentSharePoint: string;
   AppLocalEnvironmentTeams: string;
   AppLocalEnvironmentOffice: string;
@@ -11,6 +14,9 @@ declare interface ISpAccordionModalWebPartStrings {
   AppOfficeEnvironment: string;
   AppOutlookEnvironment: string;
   UnknownEnvironment: string;
+  LoadingMessage: string;
+  NoItemsMessage: string;
+  ConfigureListMessage: string;
 }
 
 declare module 'SpAccordionModalWebPartStrings' {
