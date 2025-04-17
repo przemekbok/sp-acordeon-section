@@ -10,25 +10,96 @@
   }
 }
 
-.welcome {
+.accordionContainer {
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+.loading, .error, .noItems {
   text-align: center;
+  padding: 20px;
+  color: "[theme:bodyText, default: #323130]";
+  color: var(--bodyText);
 }
 
-.welcomeImage {
-  width: 100%;
-  max-width: 420px;
+.error {
+  color: "[theme:errorText, default: #a80000]";
+  color: var(--errorText);
 }
 
-.links {
-  a {
-    text-decoration: none;
-    color: "[theme:link, default:#03787c]";
-    color: var(--link); // note: CSS Custom Properties support is limited to modern browsers only
+.accordionItem {
+  margin-bottom: 10px;
+  background-color: transparent;
+  box-shadow: none;
+  border-radius: 2px;
+  overflow: hidden;
+}
 
-    &:hover {
-      text-decoration: underline;
-      color: "[theme:linkHovered, default: #014446]";
-      color: var(--linkHovered); // note: CSS Custom Properties support is limited to modern browsers only
-    }
+.accordionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  cursor: pointer;
+  background-color: "[theme:neutralLighter, default: #f3f2f1]";
+  background-color: var(--neutralLighter);
+  border: 1px solid "[theme:neutralLight, default: #edebe9]";
+  border: 1px solid var(--neutralLight);
+  transition: background-color 0.2s ease;
+  
+  &:hover {
+    background-color: "[theme:neutralLight, default: #edebe9]";
+    background-color: var(--neutralLight);
+  }
+  
+  &.expanded {
+    background-color: "[theme:themePrimary, default: #0078d4]";
+    background-color: var(--themePrimary);
+    color: "[theme:white, default: #ffffff]";
+    color: var(--white);
+  }
+}
+
+.accordionTitle {
+  font-weight: 600;
+  font-size: 16px;
+  margin: 0;
+}
+
+.accordionIcon {
+  font-size: 12px;
+  transition: transform 0.3s ease;
+  
+  &.expanded {
+    transform: rotate(180deg);
+  }
+}
+
+.accordionContent {
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out, padding 0.3s ease;
+  background-color: "[theme:white, default: #ffffff]";
+  background-color: var(--white);
+  border: 1px solid "[theme:neutralLight, default: #edebe9]";
+  border: 1px solid var(--neutralLight);
+  border-top: none;
+  
+  &.expanded {
+    padding: 20px;
+    max-height: 1000px; // Arbitrary large value
+  }
+}
+
+.accordionBody {
+  margin: 0;
+  
+  p:first-child {
+    margin-top: 0;
+  }
+  
+  p:last-child {
+    margin-bottom: 0;
   }
 }
