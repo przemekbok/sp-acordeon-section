@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styles from './SpAccordionModal.module.scss';
 import { Icon } from '@fluentui/react/lib/Icon';
 import { IAccordionItem } from '../models/IAccordionItem';
@@ -11,6 +11,18 @@ export interface IAccordionItemProps {
 export const AccordionItem: React.FC<IAccordionItemProps> = (props) => {
   const { item } = props;
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    if (contentRef.current) {
+      if (isExpanded) {
+        const contentHeight = contentRef.current.scrollHeight;
+        contentRef.current.style.height = `${contentHeight}px`;
+      } else {
+        contentRef.current.style.height = '0px';
+      }
+    }
+  }, [isExpanded]);
 
   const toggleAccordion = (): void => {
     setIsExpanded(!isExpanded);
@@ -37,6 +49,7 @@ export const AccordionItem: React.FC<IAccordionItemProps> = (props) => {
         </span>
       </div>
       <div 
+        ref={contentRef}
         className={`${styles.accordionContent} ${isExpanded ? styles.expanded : ''}`}
         aria-hidden={!isExpanded}
       >
