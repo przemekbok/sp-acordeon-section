@@ -41,17 +41,12 @@
   justify-content: space-between;
   padding: 16px 20px;
   cursor: pointer;
-  background-color: #F2F2F2; // Light gray background
+  background-color: #F2F2F2; // Light gray background always
   border: none;
   transition: background-color 0.2s ease;
   
   &:hover {
     background-color: #EBEBEB;
-  }
-  
-  &.expanded {
-    background-color: #0078D4; // Microsoft blue when expanded
-    color: white;
   }
 }
 
@@ -72,16 +67,13 @@
 }
 
 .accordionContent {
-  padding: 0;
   height: 0;
   overflow: hidden;
-  transition: height 0.5s cubic-bezier(0.19, 1, 0.22, 1), padding 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-  background-color: white;
+  transition: height 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  background-color: transparent; // Same as section background
   border: none;
   
   &.expanded {
-    padding: 24px 20px;
-    height: auto;
     border-left: 1px solid #EBEBEB;
     border-right: 1px solid #EBEBEB;
     border-bottom: 1px solid #EBEBEB;
@@ -89,6 +81,8 @@
 }
 
 .accordionBody {
+  padding: 24px 20px; // Padding is always applied to inner content
+  background-color: transparent;
   margin: 0;
   
   p:first-child {
