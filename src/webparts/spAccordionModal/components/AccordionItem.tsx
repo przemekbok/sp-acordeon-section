@@ -12,13 +12,18 @@ export const AccordionItem: React.FC<IAccordionItemProps> = (props) => {
   const { item } = props;
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const contentRef = useRef<HTMLDivElement>(null);
+  const bodyRef = useRef<HTMLDivElement>(null);
   
+  // Calculate and set the proper height on expand/collapse
   useEffect(() => {
-    if (contentRef.current) {
+    if (contentRef.current && bodyRef.current) {
       if (isExpanded) {
-        const contentHeight = contentRef.current.scrollHeight;
-        contentRef.current.style.height = `${contentHeight}px`;
+        // Get the exact height of the body content including its padding
+        const bodyHeight = bodyRef.current.getBoundingClientRect().height;
+        // Set the outer container height to match
+        contentRef.current.style.height = `${bodyHeight}px`;
       } else {
+        // Collapse by setting height to 0
         contentRef.current.style.height = '0px';
       }
     }
@@ -31,7 +36,7 @@ export const AccordionItem: React.FC<IAccordionItemProps> = (props) => {
   return (
     <div className={styles.accordionItem}>
       <div 
-        className={`${styles.accordionHeader} ${isExpanded ? styles.expanded : ''}`}
+        className={`${styles.accordionHeader}`}
         onClick={toggleAccordion}
         role="button"
         aria-expanded={isExpanded}
@@ -54,6 +59,7 @@ export const AccordionItem: React.FC<IAccordionItemProps> = (props) => {
         aria-hidden={!isExpanded}
       >
         <div 
+          ref={bodyRef}
           className={styles.accordionBody}
           dangerouslySetInnerHTML={{ __html: item.description }}
         />
