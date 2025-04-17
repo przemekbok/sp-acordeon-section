@@ -14,19 +14,29 @@ export const AccordionItem: React.FC<IAccordionItemProps> = (props) => {
   const contentRef = useRef<HTMLDivElement>(null);
   const bodyRef = useRef<HTMLDivElement>(null);
   
-  // Calculate and set the proper height on expand/collapse
-  useEffect(() => {
+  // Update the height calculation whenever the content changes or on window resize
+  const updateHeight = (): void => {
     if (contentRef.current && bodyRef.current) {
       if (isExpanded) {
-        // Get the exact height of the body content including its padding
+        // Get the exact height of the body content
         const bodyHeight = bodyRef.current.getBoundingClientRect().height;
-        // Set the outer container height to match
+        // Set the content container height
         contentRef.current.style.height = `${bodyHeight}px`;
       } else {
-        // Collapse by setting height to 0
         contentRef.current.style.height = '0px';
       }
     }
+  };
+  
+  // Handle expand/collapse
+  useEffect(() => {
+    updateHeight();
+    
+    // Also update on window resize for responsive behavior
+    window.addEventListener('resize', updateHeight);
+    return () => {
+      window.removeEventListener('resize', updateHeight);
+    };
   }, [isExpanded]);
 
   const toggleAccordion = (): void => {
