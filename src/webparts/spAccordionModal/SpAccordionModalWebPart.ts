@@ -14,6 +14,7 @@ import { ISpAccordionModalProps } from './components/ISpAccordionModalProps';
 
 export interface ISpAccordionModalWebPartProps {
   description: string;
+  listName: string;
 }
 
 export default class SpAccordionModalWebPart extends BaseClientSideWebPart<ISpAccordionModalWebPartProps> {
@@ -29,7 +30,9 @@ export default class SpAccordionModalWebPart extends BaseClientSideWebPart<ISpAc
         isDarkTheme: this._isDarkTheme,
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName
+        userDisplayName: this.context.pageContext.user.displayName,
+        listName: this.properties.listName,
+        context: this.context
       }
     );
 
@@ -41,8 +44,6 @@ export default class SpAccordionModalWebPart extends BaseClientSideWebPart<ISpAc
       this._environmentMessage = message;
     });
   }
-
-
 
   private _getEnvironmentMessage(): Promise<string> {
     if (!!this.context.sdks.microsoftTeams) { // running in Teams, office.com or Outlook
@@ -110,6 +111,10 @@ export default class SpAccordionModalWebPart extends BaseClientSideWebPart<ISpAc
               groupFields: [
                 PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
+                }),
+                PropertyPaneTextField('listName', {
+                  label: 'List Name',
+                  description: 'Enter the name of the SharePoint list containing accordion items'
                 })
               ]
             }
