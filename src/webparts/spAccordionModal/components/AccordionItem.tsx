@@ -48,7 +48,7 @@ export const AccordionItem: React.FC<IAccordionItemProps> = (props) => {
   };
 
   return (
-    <div className={styles.accordionItem}>
+    <div className={`${styles.accordionItem} ${isExpanded ? '' : styles.accordionItemShadow}`}>
       <div 
         className={`${styles.accordionHeader}`}
         onClick={toggleAccordion}
@@ -64,7 +64,7 @@ export const AccordionItem: React.FC<IAccordionItemProps> = (props) => {
       >
         <h3 className={styles.accordionTitle}>{item.title}</h3>
         <span className={`${styles.accordionIcon} ${isExpanded ? styles.expanded : ''}`}>
-          <Icon iconName={isExpanded ? "ChevronUp" : "ChevronDown"} />
+          <Icon className={styles.icon} iconName={isExpanded ? "ChevronUp" : "ChevronDown"} />
         </span>
       </div>
       <div 
@@ -75,8 +75,8 @@ export const AccordionItem: React.FC<IAccordionItemProps> = (props) => {
         <div ref={wrapperRef} className={styles.contentWrapper}>
           <div 
             className={styles.accordionBody}
-            dangerouslySetInnerHTML={{ __html: item.description }}
           />
+            ${item.description}
         </div>
       </div>
     </div>
