@@ -76,7 +76,7 @@ export const AccordionItem: React.FC<IAccordionItemProps> = (props) => {
           <div 
             className={styles.accordionBody}
           />
-            ${item.description}
+            {item.description}
         </div>
       </div>
     </div>
